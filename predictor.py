@@ -70,8 +70,8 @@ class rnnregressor():
 		rnn_solv = [weight()(l) for l in rnn_solv]
 		rnn_solu = [weight()(l) for l in rnn_solu]
 		# Merge
-		rnn_solv = layers.add(rnn_solv)
-		rnn_solu = layers.add(rnn_solu)
+		rnn_solv = layers.add(rnn_solv, name = "solvent_vec")
+		rnn_solu = layers.add(rnn_solu, name = "solute_vec")
 		# Output
 		target = self.interaction([rnn_solv, rnn_solu])
 		return Model([tkn_solv, tkn_solu], target)
@@ -122,8 +122,8 @@ class gcnregressor():
 		gcn_solv = [weight()(l) for l in gcn_solv]
 		gcn_solu = [weight()(l) for l in gcn_solu]
 		# Merge
-		gcn_solv = layers.add(gcn_solv)
-		gcn_solu = layers.add(gcn_solu)
+		gcn_solv = layers.add(gcn_solv, name = "solvent_vec")
+		gcn_solu = layers.add(gcn_solu, name = "solute_vec")
 		# Output
 		target = self.interaction([gcn_solv, gcn_solu])
 		return Model([tkn_solv, adj_solv, tkn_solu, adj_solu], target)
