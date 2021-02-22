@@ -4,7 +4,7 @@ from tensorflow.keras import backend as K
 from tensorflow.keras.layers import Layer, LeakyReLU, Dropout, AveragePooling2D, AveragePooling1D
 
 #
-# This code is from spektral, https://github.com/danielegrattarola/spektral
+# This code is taken from spektral, https://github.com/danielegrattarola/spektral
 #
 
 def filter_dot(fltr, features):
