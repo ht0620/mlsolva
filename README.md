@@ -4,7 +4,7 @@ A deep learning solvation model
 ## Requirements
 Tensorflow (>=2.0)
 
-[Spektral](https://graphneural.network/, "spektral") (==0.6.2, working on the recent version)
+[Spektral](https://graphneural.network/, "spektral") (>=1.0)
 
 Keras
 
