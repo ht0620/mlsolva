@@ -14,7 +14,6 @@ class InputPreparation():
         for col in ["solvent", "solute"]:
             self.db["%s_rdmol" %col] = self.db.apply(lambda x: Chem.MolFromSmiles(x[col]), axis = 1)
 
-
     def GenSequence(self, token_path):
         tokenizer = pickle.load(open(token_path, "rb"))
         for col in ["solvent", "solute"]:
@@ -32,9 +31,9 @@ class InputPreparation():
             # GCN filter (for GCNconv)
             self.db["%s_gcn" %col] = self.db.apply(lambda x: convolution.gcn_filter(x["%s_adj" %col]), axis = 1)
 
-    def ImportData(self):
-        seq_solv = sequence.pad_sequences(self.db["solvent_token"], padding = "pre")
-        seq_solu = sequence.pad_sequences(self.db["solute_token" ], padding = "pre")
+    def ImportData(self, encoder = "gcn"):
+        seq_solv = sequence.pad_sequences(self.db["solvent_token"], padding = "post")
+        seq_solu = sequence.pad_sequences(self.db["solute_token" ], padding = "post")
 
         assert seq_solv.shape[0] == seq_solu.shape[0]
 
@@ -52,11 +51,18 @@ class InputPreparation():
 
         target = self.db["deltaG"].values
 
-        return (seq_solv, adj_solv, seq_solu, adj_solu), target
+        if encoder == "gcn":
+            return (seq_solv, adj_solv, seq_solu, adj_solu), target
+
+        elif encoder == "rnn":
+            return (seq_solv, seq_solu), target
+
+        else:
+            print("Invalid Network Type")
 
 
 def ZeroPadding2D(adj, dim):
-    padder = ((dim - adj.shape[0], 0), (dim - adj.shape[0], 0))
+    padder = ((0, dim - adj.shape[0]), (0, dim - adj.shape[0]))
     return numpy.pad(adj, padder, mode = "constant", constant_values = 0)
 
 ## This function is taken from mol2vec, https://github.com/samoturk/mol2vec
