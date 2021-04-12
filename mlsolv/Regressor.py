@@ -38,15 +38,20 @@ class Regressor():
 		return emb_solv, emb_solu
 
 	def GCNBlock(self, gph_solv, adj_solv, gph_solu, adj_solu, reg):
-		gcn_solv = spektral.layers.GCSConv(self.emb_dim, use_bias = True, activation = "tanh", kernel_regularizer = reg)([gph_solv, adj_solv])
-		gcn_solu = spektral.layers.GCSConv(self.emb_dim, use_bias = True, activation = "tanh", kernel_regularizer = reg)([gph_solu, adj_solu])
+		gcn_solv = spektral.layers.GCSConv(self.emb_dim, use_bias = True, activation = "tanh", kernel_regularizer = reg, bias_regularizer = reg)([gph_solv, adj_solv])
+		gcn_solu = spektral.layers.GCSConv(self.emb_dim, use_bias = True, activation = "tanh", kernel_regularizer = reg, bias_regularizer = reg)([gph_solu, adj_solu])
 		gcn_solv = layers.multiply([gcn_solv, self.msk_solv])
 		gcn_solu = layers.multiply([gcn_solu, self.msk_solu])
 		return gcn_solv, gcn_solu
 
 	def RNNBlock(self, seq_solv, seq_solu, reg, backward):
-		rnn_solv = layers.LSTM(self.emb_dim, return_sequences = True, kernel_regularizer = reg, go_backwards = backward)(seq_solv)
-		rnn_solu = layers.LSTM(self.emb_dim, return_sequences = True, kernel_regularizer = reg, go_backwards = backward)(seq_solu)
+		rnn_solv = layers.LSTM(self.emb_dim, return_sequences = True, kernel_regularizer = reg, recurrent_regularizer = reg, bias_regularizer = reg, go_backwards = backward)(seq_solv)
+		rnn_solu = layers.LSTM(self.emb_dim, return_sequences = True, kernel_regularizer = reg, recurrent_regularizer = reg, bias_regularizer = reg, go_backwards = backward)(seq_solu)
+		if backward == True:
+			rnn_solv = layers.Lambda(lambda x: backend.reverse(x, axes = 1))(rnn_solv)
+			rnn_solu = layers.Lambda(lambda x: backend.reverse(x, axes = 1))(rnn_solu)
+			rnn_solv = layers.Masking(mask_value = 0.0)(rnn_solv)
+			rnn_solu = layers.Masking(mask_value = 0.0)(rnn_solu)
 		return rnn_solv, rnn_solu
 
 	def BuildNN(self, encoder = "gcn", depth = 3, l2 = 1e-6):
