@@ -1,6 +1,8 @@
 # MLSolvA
 "MLSolvA: solvation free energy prediction from pairwise atomistic interactions by machine learning"
+
 Hyuntae Lim and YounJoon Jung, *Journal of Cheminformatics* **13**, 56 (2021).
+
 https://doi.org/10.1186/s13321-021-00533-z
 
 ## Requirements
