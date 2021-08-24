@@ -6,12 +6,16 @@ Hyuntae Lim and YounJoon Jung, *Journal of Cheminformatics* **13**, 56 (2021).
 https://doi.org/10.1186/s13321-021-00533-z
 
 ## Requirements
-Tensorflow (>=2.0)
+[Tensorflow](https://www.tensorflow.org) (>=2.0)
 
-[Spektral](https://graphneural.network/, "spektral") (>=1.0)
+[Spektral](https://graphneural.network/) (>=1.0)
 
-Keras
+[RDkit](https://www.rdkit.org/)
 
-RDkit
+[Mol2vec](https://github.com/samoturk/mol2vec)
 
-[Mol2vec](https://github.com/samoturk/mol2vec, "mol2vec")
+## Optional
+
+[Scikit-learn](https://scikit-learn.org/)
+
+[Hyperopt](https://github.com/hyperopt/hyperopt)
